@@ -1,6 +1,9 @@
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,10 +17,10 @@ import java.io.InputStreamReader;
  */
 public class ExecuteCommand extends Thread{
 
-    GUI h;
+    private SocketClientHandler h;
     String cmd;
     
-    ExecuteCommand(GUI g, String command) {
+    ExecuteCommand(SocketClientHandler g, String command) {
         h = g;
         cmd = command;
     }
@@ -44,7 +47,11 @@ public class ExecuteCommand extends Thread{
 			e.printStackTrace();
 		}
 
-		h.Receive(output);
+        try {
+            h.sendOutput(output);
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

@@ -1,8 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -14,6 +15,7 @@ public class GUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     private static GUI g;
+    SocketClient client;
     
     public GUI() {
         initComponents();
@@ -169,18 +171,34 @@ public class GUI extends javax.swing.JFrame {
             //GUI g = new GUI();
         
             String command = jTextField1.getText();
-
-            ExecuteCommand execute = new ExecuteCommand(g,command);            
-            StringBuffer output = null;
-            //ExecuteCommand.start();
-       
             
-              execute.start();
- //           execute.waitfor
+        try {
+            client.sendCommand(command);
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            
+            
+            client.readResponse();
+            
+            
+            
+            //ExecuteCommand execute = new ExecuteCommand(g,command);            
+            //StringBuffer output = null;
+            
+            
+            
+            //execute.start();
+            //           execute.waitfor
             
             //String output = execute.run(command);
             
             //jTextArea1.setText(g.Receive(output).toString());
+        } catch (IOException ex) {            
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
             
     }//GEN-LAST:event_ExecuteActionPerformed
 
@@ -189,7 +207,16 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ClearActionPerformed
 
     private void GoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoActionPerformed
-        // TODO add your handling code here:
+        // int portNumber = 9995;
+        //URI U = jTextField2.getText();
+        //U
+        client = new SocketClient("localhost",9000);
+        try {
+            client.connect();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_GoActionPerformed
 
     
@@ -246,7 +273,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-    public void Receive(StringBuffer output) {
-        jTextArea1.setText(output.toString());
+    public void Receive(String output) {
+        jTextArea1.setText(output);
     }
 }
