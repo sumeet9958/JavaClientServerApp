@@ -32,7 +32,7 @@ public class SocketServer {
         
         //Listen for clients. Block till one connects
         Socket client = null;
-        
+        //try {
         while(true){
         	System.out.println("Waiting for clients...");
         	client = serverSocket.accept();
@@ -40,21 +40,34 @@ public class SocketServer {
         	//A client has connected to this server. Send welcome message
             Thread thread = new Thread(new SocketClientHandler(client));
             thread.start();
-        }     
+                    }
+        //}
+            /* finally {
+                    serverSocket.close();
+                    } */       
+        
     }
     
+/*    public synchronized void stop(){
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error closing server", e);
+        }
+    }
+*/    
     public static void main(String[] args) {
         // Setting a default port number.
         int portNumber = 9000;
         
         try {
             // initializing the Socket Server
-            SocketServer socketServer = new SocketServer(portNumber);
-            socketServer.start();
-            
+                SocketServer socketServer = new SocketServer(portNumber);
+                socketServer.start();
+                //socketServer.stop();
             } catch (IOException e) {
-            e.printStackTrace();
-        }
+                e.printStackTrace();
+            }
     }
     
 }
