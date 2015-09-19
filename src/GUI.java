@@ -181,9 +181,10 @@ public class GUI extends javax.swing.JFrame {
         try {
             
             
-            client.readResponse();
+            String out1 = client.readResponse();
+            //System.out.println("llalal" + out1);
             
-            
+            jTextArea1.setText("Response from server: \n " + out1);
             
             //ExecuteCommand execute = new ExecuteCommand(g,command);            
             //StringBuffer output = null;
@@ -210,6 +211,9 @@ public class GUI extends javax.swing.JFrame {
         // int portNumber = 9995;
         //URI U = jTextField2.getText();
         //U
+        
+        
+        
         client = new SocketClient("localhost",9000);
         try {
             client.connect();
@@ -273,7 +277,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-    public void Receive(String output) {
+/*    public void Receive(String output) {
+        
+        System.out.println(output);
         jTextArea1.setText(output);
-    }
+    } */
 }
