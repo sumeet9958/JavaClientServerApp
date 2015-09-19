@@ -10,6 +10,8 @@
  */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -25,7 +27,7 @@ public class SocketClient {
     private String hostname;
     private int port;
     Socket socketClient;
-    GUI g;
+    GUI g = new GUI();
     public SocketClient(String hostname, int port){
         this.hostname = hostname;
         this.port = port;
@@ -38,24 +40,36 @@ public class SocketClient {
     }
     
     public void sendCommand(String cmd) throws IOException{
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socketClient.getOutputStream()));
-        writer.write(cmd);
-        writer.newLine();
+        DataOutputStream input2server = new DataOutputStream(new DataOutputStream(socketClient.getOutputStream()));
+        input2server.writeUTF(cmd);
+        //writer.newLine();
         //System.out.println(writer.toString());
         //System.out.println(cmd);
         //writer.flush();
+        //writer.close();
         
     }
     
-    public void readResponse() throws IOException{
+    public String readResponse() throws IOException{
         String userInput;
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
-        System.out.println(stdIn);
-        System.out.print("RESPONSE FROM SERVER:");
-        while ((userInput = stdIn.readLine()) != null) {
+         
+        //String s = null;
+        DataInputStream stdIn = new DataInputStream(new DataInputStream(socketClient.getInputStream()));
+        
+        //System.out.println(stdIn);
+        //System.out.println("RESPONSE FROM SERVER:");
+        //System.out.println(stdIn.toString());
+        //while((userInput = stdIn.readUTF()) != null) {
+            //String ch = userInput;
             //System.out.println(userInput);
-            g.Receive(userInput);
-        }
+        //userInput = stdIn.readLine();
+            //userInput.append(stdIn.readLine());
+            //if(stdIn.readLine() == null)
+                //break;
+        userInput = stdIn.readUTF();
+        //System.out.println("bwahaha" + userInput);
+        //g.Receive(userInput);
+        return userInput;
     }
     
 }
