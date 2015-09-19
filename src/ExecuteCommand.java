@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class ExecuteCommand extends Thread{
 
-    private SocketClientHandler h;
+    SocketClientHandler h;
     String cmd;
     
     ExecuteCommand(SocketClientHandler g, String command) {
@@ -48,7 +48,10 @@ public class ExecuteCommand extends Thread{
 		}
 
         try {
-            h.sendOutput(output);
+            //System.out.println(output);
+            String w = output.toString();
+            //System.out.println("EC OUTPUT: " + w);
+            h.sendOutput(w);
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
