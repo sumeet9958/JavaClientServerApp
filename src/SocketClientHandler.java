@@ -8,20 +8,16 @@
  *
  * @author sumeet
  */
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SocketClientHandler implements Runnable {
 
-	private Socket client;
+	private final Socket client;
         SocketClientHandler g;
         String output = null;
         
@@ -31,62 +27,43 @@ public class SocketClientHandler implements Runnable {
 
 	@Override
 	public void run() {
-		//try 
-                {
-			System.out.println("Thread started with name:"+Thread.currentThread().getName());
-                    try {
-                        readResponse();
-                        
-                    } catch (IOException | InterruptedException ex) {
-                        Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //try {
-                        
-                        //client.close();
-                        //try {
-                        //System.out.println(output);
-                        //sendOutput(output);
-                        
-                        //} catch (IOException | InterruptedException ex) {
-                        //  Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-                        //}
-                    //} catch (IOException ex) {
-                      //  Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-                    //}
+            
+            /*try {
+                DataInputStream isData = new DataInputStream(new DataInputStream(client.getInputStream()));
+            } catch (IOException ex) {
+                Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+		
+		System.out.println("Thread started with name:"+Thread.currentThread().getName());
+                   
                     
-		} /*catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}*/
-	}
-        
+                    while(true){
+                        try {
+                            readResponse();
+                        } catch (IOException | InterruptedException ex) {
+                            Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                   
+                    }
+        }      
         private void readResponse() throws IOException, InterruptedException {
 		String userInput;
 		DataInputStream stdIn = new DataInputStream(new DataInputStream(client.getInputStream()));
-                //System.out.println(stdIn.toString());
-                //System.out.println(stdIn.readLine());
 		userInput = stdIn.readUTF();
-			//if(userInput.equals("TIME?")){
-				System.out.println("REQUEST TO EXECUTE SYSTEM COMMAND");
-                                //userInput = stdIn.readLine();
-                                //System.out.println(userInput);
-                                //g = new SocketClientHandler(client);
-                                ExecuteCommand execute = new ExecuteCommand(this,userInput); 
-                                execute.start();
-				//sendOutput();
-				//break;
-		//}
-                //System.out.println("hej");
+                //stdIn.reset();
+		System.out.println("REQUEST TO EXECUTE SYSTEM COMMAND");
+                ExecuteCommand execute = new ExecuteCommand(this,userInput); 
+                execute.start();
+		
 	}
                 
         void sendOutput(String output) throws IOException, InterruptedException {
                 DataOutputStream out2Client = new DataOutputStream(new DataOutputStream(client.getOutputStream()));
-                //System.out.println("SCH :" + output);
-                //String o = output.toString();
                 out2Client.writeUTF(output);
-                //writer.newLine();
-                //writer.flush();
-                //writer.close();
-                
+                out2Client.flush();
+                //System.out.println(output);
+                //out2Client.wait();
+                //client.close();
         }
 }
         
