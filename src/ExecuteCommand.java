@@ -43,18 +43,15 @@ public class ExecuteCommand extends Thread{
 				output.append(line + "\n");
                         }
                        
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException | InterruptedException e) {
 		}
 
         try {
-            //System.out.println(output);
-            String w = output.toString();
-            //System.out.println("EC OUTPUT: " + w);
-            h.sendOutput(w);
+            h.sendOutput(output.toString());
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
+  
     }
     
 }
