@@ -8,13 +8,9 @@
  *
  * @author sumeet
  */
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -28,6 +24,7 @@ public class SocketClient {
     private int port;
     Socket socketClient;
     GUI g = new GUI();
+    
     public SocketClient(String hostname, int port){
         this.hostname = hostname;
         this.port = port;
@@ -42,34 +39,22 @@ public class SocketClient {
     public void sendCommand(String cmd) throws IOException{
         DataOutputStream input2server = new DataOutputStream(new DataOutputStream(socketClient.getOutputStream()));
         input2server.writeUTF(cmd);
-        //writer.newLine();
-        //System.out.println(writer.toString());
+        input2server.flush();
         //System.out.println(cmd);
-        //writer.flush();
-        //writer.close();
-        
     }
     
     public String readResponse() throws IOException{
         String userInput;
-         
-        //String s = null;
         DataInputStream stdIn = new DataInputStream(new DataInputStream(socketClient.getInputStream()));
-        
-        //System.out.println(stdIn);
-        //System.out.println("RESPONSE FROM SERVER:");
-        //System.out.println(stdIn.toString());
-        //while((userInput = stdIn.readUTF()) != null) {
-            //String ch = userInput;
-            //System.out.println(userInput);
-        //userInput = stdIn.readLine();
-            //userInput.append(stdIn.readLine());
-            //if(stdIn.readLine() == null)
-                //break;
         userInput = stdIn.readUTF();
-        //System.out.println("bwahaha" + userInput);
-        //g.Receive(userInput);
+        //stdIn.reset();
+        //System.out.println(userInput);
         return userInput;
     }
+
+    void close() throws IOException {
+         socketClient.close();
+    }    
+        
     
 }
