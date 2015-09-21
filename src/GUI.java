@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -166,40 +167,27 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_Clear2ActionPerformed
 
     private void ExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExecuteActionPerformed
-            
-            
-            //GUI g = new GUI();
-        
+
             String command = jTextField1.getText();
             
         try {
-            client.sendCommand(command);
+                client.sendCommand(command);
+                //System.out.println(command);
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         try {
-            
-            
+
             String out1 = client.readResponse();
-            //System.out.println("llalal" + out1);
-            
+         
+            //client.close();
             jTextArea1.setText("Response from server: \n " + out1);
-            
-            //ExecuteCommand execute = new ExecuteCommand(g,command);            
-            //StringBuffer output = null;
-            
-            
-            
-            //execute.start();
-            //           execute.waitfor
-            
-            //String output = execute.run(command);
-            
-            //jTextArea1.setText(g.Receive(output).toString());
+            //this.client.close();
         } catch (IOException ex) {            
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
             
     }//GEN-LAST:event_ExecuteActionPerformed
 
@@ -208,13 +196,19 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ClearActionPerformed
 
     private void GoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GoActionPerformed
-        // int portNumber = 9995;
-        //URI U = jTextField2.getText();
-        //U
         
         
+        URI socketURL = null;
+        try {
+            socketURL = new URI(jTextField2.getText());
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(socketURL);
+        String hostname = socketURL.getHost();
+        int port = socketURL.getPort();
         
-        client = new SocketClient("localhost",9000);
+        client = new SocketClient(hostname,port);
         try {
             client.connect();
             
@@ -277,9 +271,4 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-/*    public void Receive(String output) {
-        
-        System.out.println(output);
-        jTextArea1.setText(output);
-    } */
 }
