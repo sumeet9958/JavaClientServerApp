@@ -76,10 +76,9 @@ public class SocketClientHandler implements Runnable {
         }
                 String userInput;
 		DataInputStream stdIn = new DataInputStream(new DataInputStream(client.getInputStream()));
-                //System.out.println(userInput);
 		userInput = stdIn.readUTF();
 
-		// Info Log - request received
+		// Info Log - request received  
                 LOG.log(Level.INFO, "REQUEST TO EXECUTE SYSTEM COMMAND");
                 ExecuteCommand execute = new ExecuteCommand(this,userInput,LogLevel); 
                 execute.start();

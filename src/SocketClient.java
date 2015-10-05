@@ -40,15 +40,12 @@ public class SocketClient {
         DataOutputStream input2server = new DataOutputStream(new DataOutputStream(socketClient.getOutputStream()));
         input2server.writeUTF(cmd);
         input2server.flush();
-        //System.out.println(cmd);
     }
     
     public String readResponse() throws IOException{
         String userInput;
         DataInputStream stdIn = new DataInputStream(new DataInputStream(socketClient.getInputStream()));
         userInput = stdIn.readUTF();
-        //stdIn.reset();
-        //System.out.println(userInput);
         return userInput;
     }
 

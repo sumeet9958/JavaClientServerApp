@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 /**
 * A simple socket server
-* @author faheem
+* @author : Sumeet
 *
 */
 public class SocketServer {

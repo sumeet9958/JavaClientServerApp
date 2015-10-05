@@ -66,13 +66,11 @@ public class ExecuteCommand extends Thread{
 		}
 
         try {
-            LOG.log(Level.SEVERE,"Failed to process request");
             h.sendOutput(output.toString());
         } catch (IOException | InterruptedException ex) {
             // severe log - failed to process request
-            //Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
             LOG.log(Level.SEVERE,"Failed to process request");
-            //LOG.log(Level.WARNING,"This is a warning");
+            
         }
         
   
