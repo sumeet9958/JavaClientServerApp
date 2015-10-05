@@ -11,6 +11,9 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
 * A simple socket server
@@ -20,25 +23,48 @@ import java.net.Socket;
 public class SocketServer {
     
     private ServerSocket serverSocket;
-    private int port;
+    private final int port;
+    private final static Logger LOG = Logger.getLogger(SocketServer.class.getName());
     
     public SocketServer(int port) {
         this.port = port;
     }
     
-    public void start() throws IOException {
-        System.out.println("Starting the socket server at port:" + port);
+    public void start(String LogLevel) throws IOException {
+        
+        if(LogLevel == null)
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        else if (LogLevel == "INFO")
+        {
+            LOG.setLevel(Level.INFO);
+        }
+        else if (LogLevel == "SEVERE")
+        {
+            LOG.setLevel(Level.SEVERE);
+        }
+        else
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        // Informational log about starting the server
+        LOG.log(Level.INFO, "Starting the socket server at port:{0}", port);
+        
         serverSocket = new ServerSocket(port);
         
         //Listen for clients. Block till one connects
         Socket client = null;
      
         while(true){
-        	System.out.println("Waiting for clients...");
+        	// Informational log waiting for clients to connect
+                LOG.log(Level.INFO,"Waiting for clients...");
         	client = serverSocket.accept();
-        	System.out.println("The following client has connected:"+client.getInetAddress().getCanonicalHostName());
-        	//A client has connected to this server. Send welcome message
-            Thread thread = new Thread(new SocketClientHandler(client));
+        	
+        	//Info log - A client has connected to this server. Send welcome message
+                LOG.log(Level.INFO, "The following client has connected:{0}", client.getInetAddress().getCanonicalHostName());
+            
+            Thread thread = new Thread(new SocketClientHandler(client,LogLevel));
             thread.start();
                     }
     }
@@ -47,14 +73,39 @@ public class SocketServer {
         // Setting a default port number.
         int portNumber = 9000;
         
+        String LogLevel = args[1];
+        
+        if(LogLevel == null)
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        else if (LogLevel == "INFO")
+        {
+            LOG.setLevel(Level.INFO);
+        }
+        else if (LogLevel == "SEVERE")
+        {
+            LOG.setLevel(Level.SEVERE);
+        }
+        else
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        
+        LOG.log(Level.SEVERE,"this is severe");
+            LOG.log(Level.INFO,"this is info");
+            LOG.log(Level.WARNING,"this is other");
         try {
             // initializing the Socket Server
                 SocketServer socketServer = new SocketServer(portNumber);
-                socketServer.start();
+                socketServer.start(LogLevel);
                 //socketServer.stop();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
+            
+            
     }
     
 }
