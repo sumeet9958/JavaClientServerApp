@@ -46,6 +46,11 @@ public class GUI extends javax.swing.JFrame {
         Go = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jToolBar1.setRollover(true);
 
@@ -204,9 +209,11 @@ public class GUI extends javax.swing.JFrame {
         } catch (URISyntaxException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(socketURL);
+        //System.out.println(socketURL);
         String hostname = socketURL.getHost();
         int port = socketURL.getPort();
+        
+        System.out.println("Hostname is : " + hostname + " port is:" + port);
         
         client = new SocketClient(hostname,port);
         try {
@@ -216,6 +223,15 @@ public class GUI extends javax.swing.JFrame {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_GoActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            //client.sendCommand("heyclosenow");
+            client.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     
     
