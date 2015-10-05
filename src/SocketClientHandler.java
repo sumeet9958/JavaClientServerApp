@@ -11,7 +11,7 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
+import java.net.Socket; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,39 +20,68 @@ public class SocketClientHandler implements Runnable {
 	private final Socket client;
         SocketClientHandler g;
         String output = null;
-        
-	public SocketClientHandler(Socket client) {
+        private final static Logger LOG = Logger.getLogger(SocketClientHandler.class.getName());
+        String LogLevel;
+	public SocketClientHandler(Socket client, String LogLevel) {
 		this.client = client;
+                this.LogLevel = LogLevel;
 	}
+        
 
 	@Override
 	public void run() {
-            
-            /*try {
-                DataInputStream isData = new DataInputStream(new DataInputStream(client.getInputStream()));
-            } catch (IOException ex) {
-                Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-		
-		System.out.println("Thread started with name:"+Thread.currentThread().getName());
-                   
-                    
+                if(LogLevel == null)
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        else if (LogLevel == "INFO")
+        {
+            LOG.setLevel(Level.INFO);
+        }
+        else if (LogLevel == "SEVERE")
+        {
+            LOG.setLevel(Level.SEVERE);
+        }
+        else
+        {
+            LOG.setLevel(Level.ALL);
+        }
+		// Info log - starting of the thread 
+                LOG.log(Level.INFO, "Thread started with name: {0}", Thread.currentThread().getName());
                     while(true){
                         try {
-                            readResponse();
+                            readResponse(LogLevel);
                         } catch (IOException | InterruptedException ex) {
-                            Logger.getLogger(SocketClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+                            break;
                         }
                    
                     }
         }      
-        private void readResponse() throws IOException, InterruptedException {
-		String userInput;
+        private void readResponse(String LogLevel) throws IOException, InterruptedException {
+		if(LogLevel == null)
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        else if (LogLevel == "INFO")
+        {
+            LOG.setLevel(Level.INFO);
+        }
+        else if (LogLevel == "SEVERE")
+        {
+            LOG.setLevel(Level.SEVERE);
+        }
+        else
+        {
+            LOG.setLevel(Level.ALL);
+        }
+                String userInput;
 		DataInputStream stdIn = new DataInputStream(new DataInputStream(client.getInputStream()));
+                //System.out.println(userInput);
 		userInput = stdIn.readUTF();
-                //stdIn.reset();
-		System.out.println("REQUEST TO EXECUTE SYSTEM COMMAND");
-                ExecuteCommand execute = new ExecuteCommand(this,userInput); 
+
+		// Info Log - request received
+                LOG.log(Level.INFO, "REQUEST TO EXECUTE SYSTEM COMMAND");
+                ExecuteCommand execute = new ExecuteCommand(this,userInput,LogLevel); 
                 execute.start();
 		
 	}
@@ -61,9 +90,6 @@ public class SocketClientHandler implements Runnable {
                 DataOutputStream out2Client = new DataOutputStream(new DataOutputStream(client.getOutputStream()));
                 out2Client.writeUTF(output);
                 out2Client.flush();
-                //System.out.println(output);
-                //out2Client.wait();
-                //client.close();
         }
 }
         
