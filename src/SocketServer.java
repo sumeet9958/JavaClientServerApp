@@ -72,8 +72,12 @@ public class SocketServer {
     public static void main(String[] args) {
         // Setting a default port number.
         int portNumber = 9000;
+        String LogLevel = null;
         
-        String LogLevel = args[1];
+        if( args.length != 0)
+            LogLevel = args[0];
+        else
+            LogLevel = null;
         
         if(LogLevel == null)
         {
@@ -91,10 +95,7 @@ public class SocketServer {
         {
             LOG.setLevel(Level.ALL);
         }
-        
-        LOG.log(Level.SEVERE,"this is severe");
-            LOG.log(Level.INFO,"this is info");
-            LOG.log(Level.WARNING,"this is other");
+
         try {
             // initializing the Socket Server
                 SocketServer socketServer = new SocketServer(portNumber);
