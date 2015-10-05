@@ -19,14 +19,33 @@ public class ExecuteCommand extends Thread{
 
     SocketClientHandler h;
     String cmd;
-    
-    ExecuteCommand(SocketClientHandler g, String command) {
+    String LogLevel;
+    private final static Logger LOG = Logger.getLogger(SocketServer.class.getName());
+    ExecuteCommand(SocketClientHandler g, String command, String LogLevel) {
         h = g;
         cmd = command;
+        this.LogLevel = LogLevel;
     }
     
     @Override
     public void run() {
+        
+        if(LogLevel == null)
+        {
+            LOG.setLevel(Level.ALL);
+        }
+        else if (LogLevel == "INFO")
+        {
+            LOG.setLevel(Level.INFO);
+        }
+        else if (LogLevel == "SEVERE")
+        {
+            LOG.setLevel(Level.SEVERE);
+        }
+        else
+        {
+            LOG.setLevel(Level.ALL);
+        }
         StringBuffer output = new StringBuffer();
         BufferedReader stdInput = null;
         BufferedReader stdError = null;
@@ -47,10 +66,15 @@ public class ExecuteCommand extends Thread{
 		}
 
         try {
+            LOG.log(Level.SEVERE,"Failed to process request");
             h.sendOutput(output.toString());
         } catch (IOException | InterruptedException ex) {
-            Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
+            // severe log - failed to process request
+            //Logger.getLogger(ExecuteCommand.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE,"Failed to process request");
+            //LOG.log(Level.WARNING,"This is a warning");
         }
+        
   
     }
     
