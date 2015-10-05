@@ -52,6 +52,7 @@ public class SocketClientHandler implements Runnable {
                         try {
                             readResponse(LogLevel);
                         } catch (IOException | InterruptedException ex) {
+                            LOG.log(Level.SEVERE, "The client has left");
                             break;
                         }
                    
